@@ -8,8 +8,9 @@
       connection.send('{"op":"unconfirmed_sub"}');
     }
     connection.onmessage = function(e){
-      console.log("Server sent:" + e.data);
-
+      //console.log("Server sent:" + e.data);
+	console.log(JSON.parse(e.data));
+	//console.log(typeof(e.data))
 //      console.log("Data Size: " + e.data["size"])
       //console.log("
     }
