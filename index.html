@@ -8,10 +8,42 @@
       connection.send('{"op":"unconfirmed_sub"}');
     }
     connection.onmessage = function(e){
-      console.log("Server sent:" + e.data);
+      //console.log("Server sent:" + e.data);
 
-//      console.log("Data Size: " + e.data["size"])
-      //console.log("
+      var transactionDictionary = (JSON.parse(e.data)["x"]);
+      /*
+      console.log("Inside x: " + transactionDictionary["x"]);
+      console.log("size: " + transactionDictionary["x"]["size"]);
+      console.log("inputs: " + transactionDictionary["x"]["size"]["inputs"]);
+      */
+
+
+      //Access properties
+      var size = transactionDictionary["size"];
+      var time = transactionDictionary["time"];
+      var transactionIndex = transactionDictionary["tx_index"];
+      var hash = transactionDictionary["hash"];
+      var lockTime = transactionDictionary["lock_time"];
+
+      //Input/Output UTXOs -- testing
+      var inputAddresses = [];
+      var inputSatoshi = [];
+      var outputAddresses = [];
+      var outputSatoshi = [];
+
+      var inputsArray = transactionDictionary["inputs"];
+      var outputsArray = transactionDictionary["out"];
+      console.log("UTXO Inputs: " + inputsArray.length + "    Outputs: " + outputsArray.length); // Amount of input/outputs UTXOs
+
+
+      /*
+      for (var input in inputsArray) {
+          console.log(input); //"Looks like indiv: " + input["prev_out"] + " has seq: " + input["sequence"]
+          inputAddresses.push(input["prev_out"]); //["addr"]
+      }*/
+
+      console.log("The transaction " + transactionIndex + ": has size " + size + " and hash of " + hash + " at time " + time);
+      //console.log("Input addresses: " + inputAddresses);
     }
   </script>
 </head>
