@@ -8,7 +8,6 @@
       connection.send('{"op":"unconfirmed_sub"}');
     }
     connection.onmessage = function(e){
-      //console.log("Server sent:" + e.data);
 
       var transactionDictionary = (JSON.parse(e.data)["x"]);
       /*
