@@ -27,9 +27,9 @@
 
       //Input/Output UTXOs -- testing
       var inputAddresses = [];
-      var inputSatoshi = [];
+      var inputSatoshi = 0;
       var outputAddresses = [];
-      var outputSatoshi = [];
+      var outputSatoshi = 0;
 
       var inputsArray = transactionDictionary["inputs"];
       var outputsArray = transactionDictionary["out"];
@@ -45,10 +45,27 @@
 							return "green"   });
 
 
-      console.log("UTXO Inputs: " + inputsArray.length + "    Outputs: " + outputsArray.length); // Amount of input/outputs UTXOs
-
 
       console.log("The transaction " + transactionIndex + ": has size " + size + " and hash of " + hash + " at time " + time);
+      console.log("UTXO Inputs: " + inputsArray.length + "    Outputs: " + outputsArray.length); // Amount of input/outputs UTXOs
+
+      //Get more transaction details
+      //Inputs
+      for( i = 0; i < inputsArray.length; i++) {
+          //console.log(i.toString() + " : "+ inputsArray[i]["prev_out"]["addr"] );
+          inputAddresses.push(inputsArray[i]["prev_out"]["addr"])
+          inputSatoshi += inputsArray[i]["prev_out"]["value"]
+      }
+
+      //Outputs
+      for (j = 0; j < outputsArray.length; j++) {
+          outputAddresses.push(outputsArray[j]["addr"])
+          outputSatoshi += outputsArray[j]["value"]
+      }
+
+      console.log("Input satoshi: " + inputSatoshi + "    Output Satoshi: " + outputSatoshi);
+      console.log("--------------------------")
+
     }
 
   </script>
