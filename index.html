@@ -1,18 +1,73 @@
 <html>
 <head>
   <title>Bit By Bit | Home</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script>
-    var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
-    connection.onopen = function(){
+          var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
+      var svgContainer;
+      connection.onopen = function(){
       console.log("Opened connection.");
       connection.send('{"op":"unconfirmed_sub"}');
+
+      svgContainer  = d3.select("body").append("svg")
+                                     .attr("width", 1000)
+                                     .attr("height", 1000);
     }
     connection.onmessage = function(e){
-      console.log("Server sent:" + e.data);
 
-//      console.log("Data Size: " + e.data["size"])
-      //console.log("
+      var transactionDictionary = (JSON.parse(e.data)["x"]);
+
+
+      //Access properties
+      var size = transactionDictionary["size"];
+      var time = transactionDictionary["time"];
+      var transactionIndex = transactionDictionary["tx_index"];
+      var hash = transactionDictionary["hash"];
+      var lockTime = transactionDictionary["lock_time"];
+
+      //Input/Output UTXOs -- testing
+      var inputAddresses = [];
+      var inputSatoshi = 0;
+      var outputAddresses = [];
+      var outputSatoshi = 0;
+
+      var inputsArray = transactionDictionary["inputs"];
+      var outputsArray = transactionDictionary["out"];
+
+  //Draw the Ellipse
+
+      var circle = svgContainer.append("circle")
+       .attr("cx", function() { return Math.random() * 1000 % 1000 } )
+       .attr("cy", function() { return Math.random() * 1000 % 1000 })
+       .attr("r" , function() { return size % 10 })
+			 .attr("fill", function(){   	if(size < 100) { return "red"  }
+							else if (size > 100 && size < 200) { return "blue" }
+							return "green"   });
+
+
+
+      console.log("The transaction " + transactionIndex + ": has size " + size + " and hash of " + hash + " at time " + time);
+      console.log("UTXO Inputs: " + inputsArray.length + "    Outputs: " + outputsArray.length); // Amount of input/outputs UTXOs
+
+      //Get more transaction details
+      //Inputs
+      for( i = 0; i < inputsArray.length; i++) {
+          //console.log(i.toString() + " : "+ inputsArray[i]["prev_out"]["addr"] );
+          inputAddresses.push(inputsArray[i]["prev_out"]["addr"])
+          inputSatoshi += inputsArray[i]["prev_out"]["value"]
+      }
+
+      //Outputs
+      for (j = 0; j < outputsArray.length; j++) {
+          outputAddresses.push(outputsArray[j]["addr"])
+          outputSatoshi += outputsArray[j]["value"]
+      }
+
+      console.log("Input satoshi: " + inputSatoshi + "    Output Satoshi: " + outputSatoshi);
+      console.log("--------------------------")
+
     }
+
   </script>
 </head>
 <body>
