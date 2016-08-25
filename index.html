@@ -1,27 +1,21 @@
 <html>
 <head>
   <title>Bit By Bit | Home</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script>
-    var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
-    connection.onopen = function(){
+          var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
+      var svgContainer;
+      connection.onopen = function(){
       console.log("Opened connection.");
       connection.send('{"op":"unconfirmed_sub"}');
+
+      svgContainer  = d3.select("body").append("svg")
+                                     .attr("width", 1000)
+                                     .attr("height", 1000);
     }
     connection.onmessage = function(e){
-      //console.log("Server sent:" + e.data);
-/*<<<<<<< HEAD
-	console.log(JSON.parse(e.data));
-	//console.log(typeof(e.data))
-//      console.log("Data Size: " + e.data["size"])
-      //console.log("
-=======
-*/
+
       var transactionDictionary = (JSON.parse(e.data)["x"]);
-      /*
-      console.log("Inside x: " + transactionDictionary["x"]);
-      console.log("size: " + transactionDictionary["x"]["size"]);
-      console.log("inputs: " + transactionDictionary["x"]["size"]["inputs"]);
-      */
 
 
       //Access properties
@@ -39,19 +33,24 @@
 
       var inputsArray = transactionDictionary["inputs"];
       var outputsArray = transactionDictionary["out"];
+
+  //Draw the Ellipse
+
+      var circle = svgContainer.append("circle")
+       .attr("cx", function() { return Math.random() * 1000 % 1000 } )
+       .attr("cy", function() { return Math.random() * 1000 % 1000 })
+       .attr("r" , function() { return size % 10 })
+			 .attr("fill", function(){   	if(size < 100) { return "red"  }
+							else if (size > 100 && size < 200) { return "blue" }
+							return "green"   });
+
+
       console.log("UTXO Inputs: " + inputsArray.length + "    Outputs: " + outputsArray.length); // Amount of input/outputs UTXOs
 
 
-      /*
-      for (var input in inputsArray) {
-          console.log(input); //"Looks like indiv: " + input["prev_out"] + " has seq: " + input["sequence"]
-          inputAddresses.push(input["prev_out"]); //["addr"]
-      }*/
-
       console.log("The transaction " + transactionIndex + ": has size " + size + " and hash of " + hash + " at time " + time);
-      //console.log("Input addresses: " + inputAddresses);
-//>>>>>>> e3026c8fc700bc0b2483ce56ec7a506126ef2652
     }
+
   </script>
 </head>
 <body>
