@@ -1,0 +1,20 @@
+<html>
+<head>
+  <title>Bit By Bit | Home</title>
+  <script>
+    var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
+    connection.onopen = function(){
+      console.log("Opened connection.");
+      connection.send('{"op":"unconfirmed_sub"}');
+    }
+    connection.onmessage = function(e){
+      //console.log("Server sent:" + e.data);
+
+      console.log("Data Size: " + e.data["size"])
+      //console.log("
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>
