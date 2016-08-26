@@ -41,12 +41,16 @@
 
   //Draw the Ellipse
 
+      function sigmoid(x) {
+        return 1.0/(1.0 + Math.exp(-x))
+      }
+
       function toColor(num) {
         num >>>= 0;
         var b = num & 0xFF,
         g = (num & 0xFF00) >>> 8,
         r = (num & 0xFF0000) >>> 16,
-        a = 100;
+        a = sigmoid(num/1000);
         return "rgba(" + [r, g, b, a].join(",") + ")";
       }
 
