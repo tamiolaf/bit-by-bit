@@ -3,15 +3,18 @@
   <title>Bit By Bit | Home</title>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
-    html, body { margin:0; padding:0; overflow:hidden }
-    svg { position:fixed; top:0; left:0; height:100%; width:100% }
+    /*html, body { margin:0; padding:0; overflow:hidden }
+    svg { position:fixed; top:0; left:0; height:100%; width:100% }*/
   </style>
+</head>
+<body>
+  <div align="center" style ="height:200px;width:end; background-color:white"> <img src="bbbheaderFINAL.jpg" style="height:250px; width:750px"> </div>
+  
   <script>
-  window.onload = function() {
-      var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
       var svgContainer;
 
-      //Cash sound
+      window.onload = function() {
+      var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
       var cashSound = new sound("cash2.mp3");
 
       connection.onopen = function(){
@@ -43,15 +46,25 @@
       var inputsArray = transactionDictionary["inputs"];
       var outputsArray = transactionDictionary["out"];
 
+function sigmoid(x) {
+  return 1.0/(1.0 + Math.exp(-x));
+}
+function toColor(num) {
+  num >>>= 0;
+  var b = num & 0xFF,
+   g = (num & 0xFF00) >>> 8,
+    r = (num & 0xFF0000) >>> 16,
+     a = sigmoid(num/1000);
+      return "rgba(" + [r, g, b, a].join(",") + ")";
+    }
+
   //Draw the Ellipse
 
       var circle = svgContainer.append("circle")
        .attr("cx", function() { return Math.random() * 1000 % 1000 } )
        .attr("cy", function() { return Math.random() * 1000 % 1000 })
        .attr("r" , function() { return size % 10 })
-			 .attr("fill", function(){   	if(size < 100) { return "red"  }
-							else if (size > 100 && size < 200) { return "blue" }
-							return "green"   });
+       .attr("fill", function(){ return toColor(size) });
 
 
 
@@ -74,31 +87,27 @@
 
       console.log("Input satoshi: " + inputSatoshi + "    Output Satoshi: " + outputSatoshi);
       console.log("--------------------------")
-      cashSound.play()
-      }
-
-
-  // Play sound after every transaction
-  function sound(src) {
-    this.sound = document.createElement("audio");
-    this.sound.src = src;
-    this.sound.setAttribute("preload", "auto");
-    this.sound.setAttribute("controls", "none");
-    this.sound.style.display = "none";
-    console.log("Sound: " + this.sound)
+      cashSound.play();
+    }
+    }
+// Play sound after every transaction
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+   this.sound.setAttribute("preload", "auto");
+   this.sound.setAttribute("controls", "none");
+   this.sound.style.display = "none";
+   console.log("Sound: " + this.sound)
     console.log("Body: " + document.body)
     document.body.appendChild(this.sound);
     this.play = function(){
-        this.sound.play();
+       this.sound.play();
+     }
+     this.stop = function(){
+      this.sound.pause();
     }
-    this.stop = function(){
-        this.sound.pause();
-    }
-
   }
-}
-  </script>
-</head>
-<body>
+</script>
+
 </body>
 </html>
