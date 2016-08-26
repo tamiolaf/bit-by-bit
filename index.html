@@ -41,13 +41,20 @@
 
   //Draw the Ellipse
 
+      function toColor(num) {
+        num >>>= 0;
+        var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = 100;
+        return "rgba(" + [r, g, b, a].join(",") + ")";
+      }
+
       var circle = svgContainer.append("circle")
        .attr("cx", function() { return Math.random() * 1000 % 1000 } )
        .attr("cy", function() { return Math.random() * 1000 % 1000 })
        .attr("r" , function() { return size % 10 })
-			 .attr("fill", function(){   	if(size < 100) { return "red"  }
-							else if (size > 100 && size < 200) { return "blue" }
-							return "green"   });
+			 .attr("fill", function(){ return toColor(size) });
 
 
 
