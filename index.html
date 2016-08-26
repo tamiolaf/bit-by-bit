@@ -1,8 +1,14 @@
 <html>
 <head>
   <title>Bit By Bit | Home</title>
+  <div align="center" style ="height:200px;width:end; background-color:white"> <img src="bbbheaderFINAL.jpg" style="height:250px; width:750px"> </div>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script>
+  
+
+  
+</head>
+<body>
+<script>
           var connection = new WebSocket('wss://ws.blockchain.info/inv'/*,['soap', 'xmpp']*/);
       var svgContainer;
       connection.onopen = function(){
@@ -40,9 +46,9 @@
        .attr("cx", function() { return Math.random() * 1000 % 1000 } )
        .attr("cy", function() { return Math.random() * 1000 % 1000 })
        .attr("r" , function() { return size % 10 })
-			 .attr("fill", function(){   	if(size < 100) { return "red"  }
-							else if (size > 100 && size < 200) { return "blue" }
-							return "green"   });
+       .attr("fill", function(){    if(size < 100) { return "red"  }
+              else if (size > 100 && size < 200) { return "blue" }
+              return "green"   });
 
 
 
@@ -65,11 +71,9 @@
 
       console.log("Input satoshi: " + inputSatoshi + "    Output Satoshi: " + outputSatoshi);
       console.log("--------------------------")
-
     }
 
-  </script>
-</head>
-<body>
+</script>
+    
 </body>
 </html>
