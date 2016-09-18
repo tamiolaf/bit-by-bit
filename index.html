@@ -20,7 +20,7 @@ window.onload = function() {
       connection.send('{"op":"unconfirmed_sub"}');
 
       svgContainer  = d3.select("body").append("svg")
-                                     .attr("width", 1000)
+                                     .attr("width", 1900)
                                      .attr("height", 1000);
     }
     connection.onmessage = function(e){
@@ -59,7 +59,7 @@ function toColor(num) {
   //Draw the Ellipse
 
       var circle = svgContainer.append("circle")
-       .attr("cx", function() { return Math.random() * 1000 % 1000 } )
+       .attr("cx", function() { return Math.random() * 1900 % 1900 } )
        .attr("cy", function() { return Math.random() * 1000 % 1000 })
        .attr("r" , function() { return size % 10 })
        .attr("fill", function(){ return toColor(size)});
